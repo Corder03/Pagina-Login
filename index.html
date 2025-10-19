@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Login - Cordeiro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'custom-blue': '#7494ec',
+                        'custom-dark': '#050553',
+                        'success': '#10b981',
+                        'error': '#ef4444',
+                    },
+                    animation: {
+                        'slide-in-right': 'slideInRight 0.4s ease-in-out 2.0s forwards',
+                        'slide-out-right': 'slideOutRight 0.4s ease-in-out forwards',
+                        'slide-in-left': 'slideInLeft 0.4s ease-in-out 2.0s forwards',
+                        'slide-out-left': 'slideOutLeft 0.4s ease-in-out forwards',
+                        'fade-in': 'fadeIn 0.4s ease-in-out forwards',
+                        'shake': 'shake 0.4s ease-in-out',
+                    },
+                    keyframes: {
+                        slideInRight: {
+                            '0%': { right: '0' },
+                            '100%': { right: '50%' },
+                        },
+                        slideOutRight: {
+                            '0%': { right: '50%' },
+                            '100%': { right: '0' },
+                        },
+                        slideInLeft: {
+                            '0%': { left: '0' },
+                            '100%': { left: '-50%' },
+                        },
+                        slideOutLeft: {
+                            '0%': { left: '-50%' },
+                            '100%': { left: '0' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+                            '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                text-decoration: none;
+                list-style: none;
+            }
+            
+            body {
+                font-family: "Poppins", sans-serif;
+            }
+        }
+        
+        @layer components {
+            .form-container {
+                @apply relative w-[850px] h-[550px] bg-white m-5 rounded-[30px] shadow-[0_0_30px_rgba(0,0,0,0.2)] overflow-hidden;
+            }
+            
+            .form-box {
+                @apply absolute right-0 w-1/2 h-full bg-white flex items-center text-gray-800 text-center p-10 z-10 transition-all duration-[0.8s] ease-in-out delay-[1.7s];
+            }
+            
+            .form-container.active .form-box {
+                @apply right-1/2;
+            }
+            
+            .form-box.register {
+                @apply invisible;
+            }
+
+            .form-container.active .form-box.register {
+                @apply visible ;
+            }
+            
+            .input-box {
+                @apply relative my-8;
+            }
+            
+            .input-box input {
+                @apply w-full py-3 px-5 pr-12 bg-gray-100 rounded-lg border-none outline-none text-gray-800 font-medium transition-all duration-300;
+            }
+            
+            .input-box input:focus {
+                @apply bg-gray-200 shadow-md;
+            }
+            
+            .input-box input.error {
+                @apply border-2 border-error;
+            }
+            
+            .input-box input.success {
+                @apply border-2 border-success;
+            }
+            
+            .input-box input::placeholder {
+                @apply text-gray-500 font-normal;
+            }
+            
+            .input-box i {
+                @apply absolute right-5 top-1/2 -translate-y-1/2 text-xl;
+            }
+            
+            .forgot-link {
+                @apply -mt-4 mb-4;
+            }
+            
+            .forgot-link a {
+                @apply text-sm text-gray-800 hover:text-custom-blue transition-colors duration-300;
+            }
+            
+            .btn-primary {
+                @apply w-full h-12 bg-custom-blue rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)] border-none cursor-pointer text-white font-semibold transition-all duration-300 hover:bg-blue-600 hover:shadow-lg;
+            }
+            
+            .btn-primary:disabled {
+                @apply bg-gray-400 cursor-not-allowed hover:bg-gray-400 hover:shadow-none;
+            }
+            
+            .social-icons {
+                @apply flex justify-center;
+            }
+            
+            .social-icons a {
+                @apply inline-flex p-2 border-2 border-gray-300 rounded-lg text-2xl text-gray-800 mx-2 transition-all duration-300 hover:bg-custom-blue hover:text-white hover:border-custom-blue;
+            }
+            
+            .toggle-box {
+                @apply absolute w-full h-full;
+            }
+            
+            .toggle-box::before {
+                content: "";
+                @apply absolute left-[-250%] w-[300%] h-full bg-custom-blue rounded-[150px] z-20 transition-all duration-[1.8s] ease-in-out;
+            }
+            
+            .form-container.active .toggle-box::before {
+                @apply left-1/2;
+            }
+            
+            .toggle-panel {
+                @apply absolute w-1/2 h-full text-white flex flex-col justify-center items-center z-20 transition-all duration-[0.6s] ease-in-out;
+            }
+            
+            .toggle-panel.toggle-left {
+                @apply left-0 delay-[1.2s];
+            }
+            
+            .form-container.active .toggle-panel.toggle-left {
+                @apply left-[-50%] delay-[0.6s];
+            }
+            
+            .toggle-panel.toggle-right {
+                @apply right-[-50%] delay-[0.6s];
+            }
+            
+            .form-container.active .toggle-panel.toggle-right {
+                @apply right-0 delay-[1.2s];
+            }
+            
+            .toggle-panel .btn-secondary {
+                @apply w-40 h-11 bg-transparent border-2 border-white shadow-none hover:bg-white hover:text-custom-blue transition-all duration-300;
+            }
+            
+            .message {
+                @apply absolute top-5 left-1/2 transform -translate-x-1/2 w-4/5 p-3 rounded-lg text-white font-medium text-center z-30 opacity-0 transition-opacity duration-300;
+            }
+            
+            .message.success {
+                @apply bg-success;
+            }
+
+            .form-box {
+    transition: all 0.8s ease-in-out, opacity 0.4s ease-in-out 0.4s;
+}
+
+
+        .form-container:not(.active) .form-box.register {
+    @apply invisible opacity-0;
+}
+
+.form-container:not(.active) .form-box.login {
+    @apply visible opacity-100;
+}
+            
+            .message.error {
+                @apply bg-error;
+            }
+            
+            .password-toggle {
+                @apply absolute right-10 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700;
+            }
+            
+            .password-strength {
+                @apply h-1 w-0 mt-1 rounded-full transition-all duration-500;
+            }
+            
+            .strength-weak {
+                @apply bg-error w-1/4;
+            }
+            
+            .strength-medium {
+                @apply bg-yellow-500 w-2/4;
+            }
+            
+            .strength-strong {
+                @apply bg-success w-full;
+            }
+            
+            /* Mobile styles */
+            @media (max-width: 768px) {
+                .form-container {
+                    @apply w-[95vw] h-[600px];
+                }
+                
+                .form-box {
+                    @apply w-full p-5;
+                }
+                
+                .toggle-box::before {
+                    @apply left-0 top-[-100%] w-full h-[200%] rounded-[50px];
+                }
+                
+                .form-container.active .toggle-box::before {
+                    @apply left-0 top-0;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body class="flex justify-center items-center min-h-screen bg-gradient-to-r from-black to-custom-dark">
+    <div class="form-container">
+        <!-- Mensagens de feedback -->
+        <div id="message" class="message"></div>
+        
+        <div class="form-box login">
+            <form id="loginForm">
+                <h1 class="text-4xl mb-6">Login</h1>
+                <div class="input-box">
+                    <input type="text" id="loginUsername" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                    <span class="password-toggle" id="toggleLoginPassword">
+                        <i class='bx bx-hide'></i>
+                    </span>
+                </div>
+                <div class="forgot-link">
+                    <a href="#" id="forgotPasswordLink">Esqueceu a senha?</a>
+                </div>
+                <button type="submit" class="btn-primary" id="loginButton">Login</button>
+                <p class="text-sm my-4">Ou conectar com outra plataforma?</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google'></i></a>
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-github'></i></a>
+                    <a href="#"><i class='bx bxl-linkedin'></i></a>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-box register">
+            <form id="registerForm">
+                <h1 class="text-4xl mb-6">Registrar</h1>
+                <div class="input-box">
+                    <input type="text" id="registerUsername" placeholder="Username" required>
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="registerEmail" placeholder="Email" required>
+                    <i class='bx bxs-envelope'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="registerPassword" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                    <span class="password-toggle" id="toggleRegisterPassword">
+                        <i class='bx bx-hide'></i>
+                    </span>
+                    <div class="password-strength" id="passwordStrength"></div>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="confirmPassword" placeholder="Confirmar Password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <button type="submit" class="btn-primary" id="registerButton">Registrar</button>
+                <p class="text-sm my-4">Ou registrar com outra plataforma?</p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-google'></i></a>
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-github'></i></a>
+                    <a href="#"><i class='bx bxl-linkedin'></i></a>
+                </div>
+            </form>
+        </div>
+
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1 class="text-4xl">Opa eai meu nobre!</h1>
+                <p class="text-sm my-4">Não tem conta fi?</p>
+                <button class="btn-primary btn-secondary register-btn">Registrar</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1 class="text-4xl">Bem vindo de volta!</h1>
+                <p class="text-sm my-4">Ja tem uma conta?</p>
+                <button class="btn-primary btn-secondary login-btn">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
